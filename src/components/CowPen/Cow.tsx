@@ -45,6 +45,8 @@ export const Cow = ({
   isSelected,
 }: CowProps) => {
   const [cowImage, setCowImage] = useState(pixel)
+  const [blinkingCowImage, setBlinkingCowImage] = useState(pixel)
+  const [isBlinking, setIsBlinking] = useState(false)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [moveDirection, setMoveDirection] = useState<CowMoveDirection>(RIGHT)
   const [rotate, setRotate] = useState(0)
@@ -148,15 +150,27 @@ export const Cow = ({
   useEffect(() => {
     ;(async () => {
       const loadedCowImage = await getCowImage(cow)
+      const loadedBlinkingCowImage = await getCowImage(cow, true)
 
       if (isMounted() === false) return
 
       setCowImage(loadedCowImage)
+      setBlinkingCowImage(loadedBlinkingCowImage)
     })()
     // Mount-only effect (the function-component equivalent of
     // `componentDidMount`): it must run exactly once, so `cow` is
     // intentionally omitted from the dependency array.
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    const blinkTimeoutId = setTimeout(() => {
+      setIsBlinking(true)
+    }, 3000)
+
+    return () => {
+      clearTimeout(blinkTimeoutId)
+    }
   }, [])
 
   // Cancels any in-flight tween on unmount; `move` handles the resulting
@@ -261,7 +275,7 @@ export const Cow = ({
         <div {...{ style: { transform: `rotateY(${rotate}deg)` } }}>
           <img
             {...{
-              src: cowImage,
+              src: isBlinking ? blinkingCowImage : cowImage,
             }}
             alt={cowDisplayName}
           />
