@@ -1,3 +1,4 @@
+import { random } from '../../common/utils.js'
 import { findCowById } from '../../utils/findCowById.js'
 import { generateOffspringCow } from '../../utils/generateOffspringCow.js'
 import { cowColors } from '../../enums.js'
@@ -6,6 +7,7 @@ import {
   COW_GESTATION_PERIOD_DAYS,
   COW_MINIMUM_HAPPINESS_TO_BREED,
   PURCHASEABLE_COW_PENS,
+  COW_TWIN_CHANCE,
 } from '../../constants.js'
 import { COW_BORN_MESSAGE } from '../../templates.js'
 
@@ -53,6 +55,21 @@ export const processCowBreeding = (state: farmhand.state): farmhand.state => {
     ? generateOffspringCow(cow1, cow2, playerId)
     : null
 
+  const newborns: farmhand.cow[] = offspringCow ? [offspringCow] : []
+
+  const canGenerateTwin =
+    !!offspringCow &&
+    !!cowPenData &&
+    cowInventory.length + newborns.length < cowPenData.cows &&
+    random() <= COW_TWIN_CHANCE
+
+  if (canGenerateTwin) {
+    newborns.push(generateOffspringCow(cow1, cow2, playerId))
+  }
+
+  const newCowInventory =
+    newborns.length > 0 ? [...cowInventory, ...newborns] : cowInventory
+
   if (offspringCow) {
     const experienceGained =
       offspringCow.color === cowColors.RAINBOW
@@ -64,10 +81,7 @@ export const processCowBreeding = (state: farmhand.state): farmhand.state => {
 
   return {
     ...state,
-    cowInventory:
-      shouldGenerateOffspring && offspringCow
-        ? [...cowInventory, offspringCow]
-        : cowInventory,
+    cowInventory: newCowInventory,
     cowBreedingPen: {
       ...cowBreedingPen,
       daysUntilBirth: shouldGenerateOffspring

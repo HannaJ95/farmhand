@@ -3,6 +3,7 @@ import {
   COW_GESTATION_PERIOD_DAYS,
   PURCHASEABLE_COW_PENS,
 } from '../../constants.js'
+import { randomNumberService } from '../../common/services/randomNumber.js'
 import { genders } from '../../enums.js'
 import { generateCow } from '../../utils/generateCow.js'
 import { testState } from '../../test-utils/index.js'
@@ -122,6 +123,33 @@ describe('processCowBreeding', () => {
 
             test('adds offspring cow to cowInventory', () => {
               expect(newState.cowInventory).toHaveLength(3)
+            })
+
+            test('adds a twin calf when the twin chance rolls true', () => {
+              const randomSpy = vi.spyOn(
+                randomNumberService,
+                'generateRandomNumber'
+              )
+
+              randomSpy.mockReturnValue(0.005)
+
+              const twinState = processCowBreeding(
+                testState({
+                  cowBreedingPen: {
+                    cowId1: maleCow1.id,
+                    cowId2: femaleCow.id,
+                    daysUntilBirth: 1,
+                  },
+                  cowInventory: [maleCow1, femaleCow],
+                  experience: 0,
+                  newDayNotifications: [],
+                  purchasedCowPen: 1,
+                })
+              )
+
+              expect(twinState.cowInventory).toHaveLength(4)
+
+              randomSpy.mockRestore()
             })
 
             test('adds experience', () => {
