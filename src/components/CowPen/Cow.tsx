@@ -147,7 +147,7 @@ export const Cow = ({
   // Loads the cow's image on mount.
   useEffect(() => {
     ;(async () => {
-      const loadedCowImage = await getCowImage(cow)
+      const loadedCowImage = await getCowImage(cow, true)
 
       if (isMounted() === false) return
 

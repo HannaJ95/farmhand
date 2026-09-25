@@ -98,10 +98,17 @@ const colorizeCowTemplate = (() => {
   }
 })()
 
-export const getCowImage = async (cow: farmhand.cow): Promise<string> => {
+export const getCowImage = async (
+  cow: farmhand.cow,
+  isBlinking = false
+): Promise<string> => {
   const cowIdNumber = convertStringToInteger(cow.id)
-  const { variations } = animals.cow
-  const cowTemplate = variations[cowIdNumber % variations.length]
+
+  const { variations, blinkingVariations } = animals.cow
+
+  const cowVariations = isBlinking ? blinkingVariations : variations
+
+  const cowTemplate = cowVariations[cowIdNumber % cowVariations.length]
 
   return await colorizeCowTemplate(cowTemplate, cow.color as cowColors)
 }
