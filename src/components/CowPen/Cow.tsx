@@ -19,9 +19,9 @@ const randomPosition = () => 10 + random() * 80
 const flipAnimationDuration = 1000
 const transitionAnimationDuration = 3000
 
-const blinkDuration = 200
-const minBlinkInterval = 2000
-const blinkIntervalVariance = 4000
+const blinkAnimationDuration = 200
+const minBlinkAnimationInterval = 2000
+const blinkAnimationIntervalVariance = 4000
 
 // This MUST be kept in sync with the `animationDuration` of the `.is-animating`
 // rule in CowPen.tsx.
@@ -169,26 +169,26 @@ export const Cow = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Repeatedly blinks the cow: closes its eyes for `blinkDuration`, then
+  // Repeatedly blinks the cow: closes its eyes for `blinkAnimationDuration`, then
   // waits a randomized interval before blinking again.
   useEffect(() => {
-    let blinkTimeoutId: ReturnType<typeof setTimeout>
+    let blinkAnimationTimeoutId: ReturnType<typeof setTimeout>
 
     const scheduleNextBlink = () => {
-      blinkTimeoutId = setTimeout(() => {
+      blinkAnimationTimeoutId = setTimeout(() => {
         setIsBlinking(true)
 
-        blinkTimeoutId = setTimeout(() => {
+        blinkAnimationTimeoutId = setTimeout(() => {
           setIsBlinking(false)
           scheduleNextBlink()
-        }, blinkDuration)
-      }, minBlinkInterval + random() * blinkIntervalVariance)
+        }, blinkAnimationDuration)
+      }, minBlinkAnimationInterval + random() * blinkAnimationIntervalVariance)
     }
 
     scheduleNextBlink()
 
     return () => {
-      clearTimeout(blinkTimeoutId)
+      clearTimeout(blinkAnimationTimeoutId)
     }
   }, [])
 
