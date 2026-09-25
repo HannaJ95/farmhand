@@ -19,6 +19,10 @@ const randomPosition = () => 10 + random() * 80
 const flipAnimationDuration = 1000
 const transitionAnimationDuration = 3000
 
+const blinkDuration = 200
+const minBlinkInterval = 2000
+const blinkIntervalVariance = 4000
+
 // This MUST be kept in sync with the `animationDuration` of the `.is-animating`
 // rule in CowPen.tsx.
 const hugAnimationDuration = 750
@@ -149,8 +153,10 @@ export const Cow = ({
   // Loads the cow's image on mount.
   useEffect(() => {
     ;(async () => {
-      const loadedCowImage = await getCowImage(cow)
-      const loadedBlinkingCowImage = await getCowImage(cow, true)
+      const [loadedCowImage, loadedBlinkingCowImage] = await Promise.all([
+        getCowImage(cow),
+        getCowImage(cow, true),
+      ])
 
       if (isMounted() === false) return
 
@@ -163,10 +169,23 @@ export const Cow = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Repeatedly blinks the cow: closes its eyes for `blinkDuration`, then
+  // waits a randomized interval before blinking again.
   useEffect(() => {
-    const blinkTimeoutId = setTimeout(() => {
-      setIsBlinking(true)
-    }, 3000)
+    let blinkTimeoutId: ReturnType<typeof setTimeout>
+
+    const scheduleNextBlink = () => {
+      blinkTimeoutId = setTimeout(() => {
+        setIsBlinking(true)
+
+        blinkTimeoutId = setTimeout(() => {
+          setIsBlinking(false)
+          scheduleNextBlink()
+        }, blinkDuration)
+      }, minBlinkInterval + random() * blinkIntervalVariance)
+    }
+
+    scheduleNextBlink()
 
     return () => {
       clearTimeout(blinkTimeoutId)
@@ -275,7 +294,10 @@ export const Cow = ({
         <div {...{ style: { transform: `rotateY(${rotate}deg)` } }}>
           <img
             {...{
-              src: isBlinking ? blinkingCowImage : cowImage,
+              src:
+                isBlinking && blinkingCowImage !== pixel
+                  ? blinkingCowImage
+                  : cowImage,
             }}
             alt={cowDisplayName}
           />
