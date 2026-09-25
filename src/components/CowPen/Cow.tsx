@@ -150,7 +150,7 @@ export const Cow = ({
     [tweenable]
   )
 
-  // Loads the cow's image on mount.
+  // Loads the cow's image and blinking image on mount.
   useEffect(() => {
     ;(async () => {
       const [loadedCowImage, loadedBlinkingCowImage] = await Promise.all([
