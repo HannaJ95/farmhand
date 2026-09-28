@@ -42,6 +42,16 @@ import { useFarmhand } from './useFarmhand.js'
 // Utility object for reuse in no-ops to save on memory
 const emptyObject = Object.freeze({})
 
+const viewEmojiMap: Record<string, string> = {
+  HOME: '🏠',
+  SHOP: '🛒',
+  FIELD: '🥕',
+  FOREST: '🌲',
+  COW_PEN: '🐮',
+  WORKSHOP: '⛏️',
+  CELLAR: '🍷',
+}
+
 export type FarmhandInstance = any
 
 const Farmhand = (props: FarmhandProps) => {
@@ -206,6 +216,18 @@ const Farmhand = (props: FarmhandProps) => {
               </Drawer>
               <Stage />
               <div className="bottom-controls">
+                <nav aria-label="Farm areas">
+                  {viewList.map(view => (
+                    <button
+                      aria-label={view}
+                      aria-pressed={state.stageFocus === view}
+                      key={view}
+                      onClick={() => handlers.handleViewChangeButtonClick(view)}
+                    >
+                      {viewEmojiMap[view]}
+                    </button>
+                  ))}
+                </nav>
                 <MobileStepper
                   variant="dots"
                   steps={viewList.length}
