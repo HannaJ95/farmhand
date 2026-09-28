@@ -152,6 +152,42 @@ describe('processCowBreeding', () => {
               randomSpy.mockRestore()
             })
 
+            test('mentions both twins in the notification', () => {
+              const randomSpy = vi.spyOn(
+                randomNumberService,
+                'generateRandomNumber'
+              )
+
+              randomSpy.mockReturnValue(0.005)
+
+              const twinState = processCowBreeding(
+                testState({
+                  cowBreedingPen: {
+                    cowId1: maleCow1.id,
+                    cowId2: femaleCow.id,
+                    daysUntilBirth: 1,
+                  },
+                  cowInventory: [maleCow1, femaleCow],
+                  experience: 0,
+                  newDayNotifications: [],
+                  purchasedCowPen: 1,
+                })
+              )
+
+              expect(twinState.newDayNotifications).toHaveLength(1)
+              expect(twinState.newDayNotifications[0].message).toContain(
+                'twins'
+              )
+              expect(twinState.newDayNotifications[0].message).toContain(
+                twinState.cowInventory[2].name
+              )
+              expect(twinState.newDayNotifications[0].message).toContain(
+                twinState.cowInventory[3].name
+              )
+
+              randomSpy.mockRestore()
+            })
+
             test('adds experience', () => {
               expect(newState.experience).toEqual(EXPERIENCE_VALUES.COW_BRED)
             })

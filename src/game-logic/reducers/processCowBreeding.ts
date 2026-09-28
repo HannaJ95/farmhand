@@ -9,7 +9,7 @@ import {
   PURCHASEABLE_COW_PENS,
   COW_TWIN_CHANCE,
 } from '../../constants.js'
-import { COW_BORN_MESSAGE } from '../../templates.js'
+import { COW_BORN_MESSAGE, COW_TWINS_MESSAGE } from '../../templates.js'
 
 import { addExperience } from './addExperience.js'
 
@@ -79,6 +79,13 @@ export const processCowBreeding = (state: farmhand.state): farmhand.state => {
     state = addExperience(state, experienceGained)
   }
 
+  const birthMessage =
+    newborns.length > 1 && newborns[0] && newborns[1]
+      ? COW_TWINS_MESSAGE('', cow1, cow2, newborns[0], newborns[1])
+      : offspringCow
+      ? COW_BORN_MESSAGE('', cow1, cow2, offspringCow)
+      : ''
+
   return {
     ...state,
     cowInventory: newCowInventory,
@@ -88,11 +95,11 @@ export const processCowBreeding = (state: farmhand.state): farmhand.state => {
         ? COW_GESTATION_PERIOD_DAYS
         : daysUntilBirth,
     },
-    newDayNotifications: offspringCow
+    newDayNotifications: birthMessage
       ? [
           ...newDayNotifications,
           {
-            message: COW_BORN_MESSAGE('', cow1, cow2, offspringCow),
+            message: birthMessage,
             severity: 'success',
           },
         ]
