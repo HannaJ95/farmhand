@@ -5,7 +5,6 @@ import MenuIcon from '@mui/icons-material/Menu.js'
 import CssBaseline from '@mui/material/CssBaseline/index.js'
 import Drawer from '@mui/material/Drawer/index.js'
 import Fab from '@mui/material/Fab/index.js'
-import MobileStepper from '@mui/material/MobileStepper/index.js'
 import { Theme, ThemeProvider } from '@mui/material/styles/index.js'
 import Tooltip from '@mui/material/Tooltip/index.js'
 import classNames from 'classnames'
@@ -138,7 +137,26 @@ const Farmhand = (props: FarmhandProps) => {
                   [`@media (max-width: ${breakpoints.mediumPhone}px)`]: {
                     bottom: '0.5em',
                   },
-                  '& .MuiMobileStepper-root': { background: 'none' },
+                  '& .view-navigation': {
+                    display: 'flex',
+                    gap: '0.5em',
+                    marginBottom: '0.5em',
+                    '& button': {
+                      alignItems: 'center',
+                      backgroundColor: 'rgba(128, 128, 128, 0.35)',
+                      border: 0,
+                      borderRadius: '50%',
+                      display: 'flex',
+                      fontSize: '1.5em',
+                      height: '2em',
+                      justifyContent: 'center',
+                      padding: 0,
+                      width: '2em',
+                      '&[aria-pressed="true"]': {
+                        backgroundColor: t.palette.primary.main,
+                      },
+                    },
+                  },
                   '& .fab-buttons': {
                     display: 'flex',
                     flexFlow: 'row',
@@ -216,7 +234,7 @@ const Farmhand = (props: FarmhandProps) => {
               </Drawer>
               <Stage />
               <div className="bottom-controls">
-                <nav aria-label="Farm areas">
+                <nav aria-label="Farm areas" className="view-navigation">
                   {viewList.map(view => (
                     <button
                       aria-label={view}
@@ -228,15 +246,6 @@ const Farmhand = (props: FarmhandProps) => {
                     </button>
                   ))}
                 </nav>
-                <MobileStepper
-                  variant="dots"
-                  steps={viewList.length}
-                  position="static"
-                  activeStep={viewList.indexOf(state.stageFocus)}
-                  className=""
-                  backButton={null}
-                  nextButton={null}
-                />
                 <div className="fab-buttons buttons">
                   <Fab
                     aria-label="Previous view"
