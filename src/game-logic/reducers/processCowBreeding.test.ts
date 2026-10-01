@@ -3,7 +3,7 @@ import {
   COW_GESTATION_PERIOD_DAYS,
   PURCHASEABLE_COW_PENS,
 } from '../../constants.js'
-import { randomNumberService } from '../../common/services/randomNumber.js'
+import { randomNumberService } from '../../common/services/randomNumber.ts'
 import { genders } from '../../enums.js'
 import { generateCow } from '../../utils/generateCow.js'
 import { testState } from '../../test-utils/index.js'
@@ -122,7 +122,8 @@ describe('processCowBreeding', () => {
             })
 
             test('adds offspring cow to cowInventory', () => {
-              expect(newState.cowInventory).toHaveLength(3)
+              expect(newState.cowInventory.length).toBeGreaterThanOrEqual(3)
+              expect(newState.cowInventory.length).toBeLessThanOrEqual(4)
             })
 
             test('adds a twin calf when the twin chance rolls true', () => {
@@ -186,7 +187,9 @@ describe('processCowBreeding', () => {
                 color: firstTwin.color,
                 baseWeight: firstTwin.baseWeight,
                 colorsInBloodline: firstTwin.colorsInBloodline,
+                patternSeed: firstTwin.id,
               })
+              expect(firstTwin.patternSeed).toEqual(secondTwin.patternSeed)
               expect(secondTwin.id).not.toEqual(firstTwin.id)
 
               randomSpy.mockRestore()

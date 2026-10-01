@@ -64,11 +64,15 @@ export const processCowBreeding = (state: farmhand.state): farmhand.state => {
     random() <= COW_TWIN_CHANCE
 
   if (canGenerateTwin) {
+    const patternSeed = offspringCow.patternSeed ?? offspringCow.id
+
+    newborns[0] = { ...offspringCow, patternSeed }
     newborns.push(
       generateOffspringCow(cow1, cow2, playerId, {
         gender: offspringCow.gender,
         color: offspringCow.color,
         baseWeight: offspringCow.baseWeight,
+        patternSeed,
       })
     )
   }

@@ -99,9 +99,10 @@ const colorizeCowTemplate = (() => {
 })()
 
 export const getCowImage = async (cow: farmhand.cow): Promise<string> => {
-  const cowIdNumber = convertStringToInteger(cow.id)
+  const patternSeed = cow.patternSeed ?? cow.id
+  const patternSeedNumber = convertStringToInteger(patternSeed)
   const { variations } = animals.cow
-  const cowTemplate = variations[cowIdNumber % variations.length]
+  const cowTemplate = variations[patternSeedNumber % variations.length]
 
   return await colorizeCowTemplate(cowTemplate, cow.color as cowColors)
 }
