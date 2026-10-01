@@ -152,6 +152,46 @@ describe('processCowBreeding', () => {
               randomSpy.mockRestore()
             })
 
+            test('twins share traits but have separate identities', () => {
+              const randomSpy = vi.spyOn(
+                randomNumberService,
+                'generateRandomNumber'
+              )
+
+              randomSpy
+                .mockReturnValueOnce(0.1)
+                .mockReturnValueOnce(0.2)
+                .mockReturnValueOnce(0.2)
+                .mockReturnValueOnce(0.005)
+                .mockReturnValueOnce(0.9)
+                .mockReturnValueOnce(0.9)
+
+              const twinState = processCowBreeding(
+                testState({
+                  cowBreedingPen: {
+                    cowId1: maleCow1.id,
+                    cowId2: femaleCow.id,
+                    daysUntilBirth: 1,
+                  },
+                  cowInventory: [maleCow1, femaleCow],
+                  experience: 0,
+                  newDayNotifications: [],
+                  purchasedCowPen: 1,
+                })
+              )
+              const [firstTwin, secondTwin] = twinState.cowInventory.slice(-2)
+
+              expect(secondTwin).toMatchObject({
+                gender: firstTwin.gender,
+                color: firstTwin.color,
+                baseWeight: firstTwin.baseWeight,
+                colorsInBloodline: firstTwin.colorsInBloodline,
+              })
+              expect(secondTwin.id).not.toEqual(firstTwin.id)
+
+              randomSpy.mockRestore()
+            })
+
             test('mentions both twins in the notification', () => {
               const randomSpy = vi.spyOn(
                 randomNumberService,
