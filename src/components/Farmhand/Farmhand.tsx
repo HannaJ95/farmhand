@@ -5,6 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu.js'
 import CssBaseline from '@mui/material/CssBaseline/index.js'
 import Drawer from '@mui/material/Drawer/index.js'
 import Fab from '@mui/material/Fab/index.js'
+import MobileStepper from '@mui/material/MobileStepper/index.js'
 import { Theme, ThemeProvider } from '@mui/material/styles/index.js'
 import Tooltip from '@mui/material/Tooltip/index.js'
 import classNames from 'classnames'
@@ -137,10 +138,19 @@ const Farmhand = (props: FarmhandProps) => {
                   [`@media (max-width: ${breakpoints.mediumPhone}px)`]: {
                     bottom: '0.5em',
                   },
+                  '& .MuiMobileStepper-root': {
+                    background: 'none',
+                    [`@media (min-width: ${breakpoints.md}px)`]: {
+                      display: 'none',
+                    },
+                  },
                   '& .view-navigation': {
-                    display: 'flex',
+                    display: 'none',
                     gap: '0.5em',
                     marginBottom: '0.5em',
+                    [`@media (min-width: ${breakpoints.md}px)`]: {
+                      display: 'flex',
+                    },
                     '& button': {
                       alignItems: 'center',
                       backgroundColor: 'rgba(128, 128, 128, 0.35)',
@@ -246,6 +256,15 @@ const Farmhand = (props: FarmhandProps) => {
                     </button>
                   ))}
                 </nav>
+                <MobileStepper
+                  variant="dots"
+                  steps={viewList.length}
+                  position="static"
+                  activeStep={viewList.indexOf(state.stageFocus)}
+                  className=""
+                  backButton={null}
+                  nextButton={null}
+                />
                 <div className="fab-buttons buttons">
                   <Fab
                     aria-label="Previous view"
