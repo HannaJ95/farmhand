@@ -177,7 +177,9 @@ export const cheese: farmhand.recipe = convertToRecipe({
   ingredients: {
     [items.milk3.id]: 8,
   },
-  condition: state => (state.itemsSold[items.milk3.id] || 0) >= 20,
+  condition: state =>
+    state.purchasedCheeseMaker > 0 &&
+    (state.itemsSold[items.milk3.id] || 0) >= 20,
   recipeType: recipeType.KITCHEN,
 })
 

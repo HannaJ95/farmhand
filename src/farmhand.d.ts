@@ -434,6 +434,7 @@ declare namespace farmhand {
      * Keys are itemIds.
      */
     priceSurges: Partial<Record<string, priceEvent>>
+    purchasedCheeseMaker: number
     purchasedCombine: number
     purchasedComposter: number
     purchasedCowPen: number

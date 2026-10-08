@@ -212,6 +212,7 @@ export const testState = (
   room: 'test-room',
   sendCowAccept: null,
   sendCowReject: null,
+  purchasedCheeseMaker: 0,
   purchasedCombine: 0,
   purchasedComposter: 0,
   purchasedCowPen: 0,

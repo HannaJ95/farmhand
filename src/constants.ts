@@ -79,6 +79,10 @@ export const PURCHASEABLE_COMPOSTERS = freeze(
   new Map([[1, { type: 'Basic', price: 1_000 }]])
 )
 
+export const PURCHASEABLE_CHEESE_MAKERS = freeze(
+  new Map([[1, { type: 'Basic', price: 1_000 }]])
+)
+
 export const PURCHASEABLE_SMELTERS = freeze(
   new Map([[1, { type: 'Basic', price: 250_000 }]])
 )
@@ -202,6 +206,7 @@ export const PERSISTED_STATE_KEYS = [
   'priceCrashes',
   'priceSurges',
   'profitabilityStreak',
+  'purchasedCheeseMaker',
   'purchasedCombine',
   'purchasedComposter',
   'purchasedCowPen',
@@ -352,6 +357,7 @@ export const WINE_GROWTH_TIMELINE_CAP = 100
 export const EXPERIENCE_VALUES = {
   CELLAR_ACQUIRED: 10,
   CELLAR_EXPANDED: 5,
+  CHEESE_MAKER_ACQUIRED: 10,
   COMPOSTER_ACQUIRED: 10,
   COW_BRED: 1,
   COW_PEN_ACQUIRED: 10,

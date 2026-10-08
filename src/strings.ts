@@ -105,6 +105,9 @@ export const FORGE_AVAILABLE_NOTIFICATION =
 export const RECYCLING_AVAILABLE_NOTIFICATION =
   '**Recycling** is now available in the Workshop!'
 
+export const CHEESE_MAKER_AVAILABLE_NOTIFICATION =
+  "**Cheese** will be available in Recipes once you've sold enough high quality milk"
+
 export const FOREST_AVAILABLE_NOTIFICATION = 'The **Forest** is now available!'
 
 export const WOOD_CHIPPER_AVAILABLE_NOTIFICATION =

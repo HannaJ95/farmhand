@@ -287,6 +287,10 @@ export default {
     }
   },
 
+  handleCheeseMakerPurchase(this: Farmhand, cheeseMakerId: number) {
+    this.purchaseCheeseMaker(cheeseMakerId)
+  },
+
   handleCombinePurchase(this: Farmhand, combineId: number) {
     this.purchaseCombine(combineId)
   },

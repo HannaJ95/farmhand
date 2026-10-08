@@ -145,6 +145,7 @@ export const useFarmhand = (props: FarmhandProps) => {
       room: decodeURIComponent(props.match?.params?.room || DEFAULT_ROOM),
       sendCowAccept: noop,
       sendCowReject: noop,
+      purchasedCheeseMaker: 0,
       purchasedCombine: 0,
       purchasedComposter: 0,
       purchasedCowPen: 0,
