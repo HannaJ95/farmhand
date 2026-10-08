@@ -32,6 +32,8 @@ export const COW_ALREADY_OWNED = 'It looks like you already have this cow!'
 export const OUT_OF_COW_FEED_NOTIFICATION =
   "You're out of cow feed! Buy some more before your cows get hungry and run away!"
 export const INVENTORY_FULL_NOTIFICATION = 'Your inventory is full!'
+export const SHOP_INVENTORY_FULL_BANNER =
+  'Your inventory is full! Sell or use some items to make room before buying more. You can also buy a Storage Unit in the Upgrades tab.'
 
 export const SHOVELED = 'Shoveled plot'
 
