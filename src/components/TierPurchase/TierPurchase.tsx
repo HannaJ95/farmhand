@@ -38,6 +38,14 @@ export function TierPurchase({
 
   const tierValues = [...tiers.entries()]
 
+  console.log('TierPurchase', {
+    title,
+    money,
+    purchasedTier,
+    selectedTier,
+    tierValues,
+  })
+
   const selectedTierNumber = Number(selectedTier)
 
   const hasPurchasedTier = (tierLevel: number) => tierLevel <= purchasedTier

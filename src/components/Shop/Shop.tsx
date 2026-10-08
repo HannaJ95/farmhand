@@ -20,6 +20,7 @@ import { itemType, stageFocusType, toolType } from '../../enums.js'
 import {
   INFINITE_STORAGE_LIMIT,
   PURCHASEABLE_CELLARS,
+  PURCHASEABLE_CHEESE_MAKERS,
   PURCHASEABLE_COMBINES,
   PURCHASEABLE_COMPOSTERS,
   PURCHASEABLE_COW_PENS,
@@ -64,6 +65,7 @@ const categorizeShopInventory = memoize(
 )
 
 export const Shop = ({
+  handleCheeseMakerPurchase,
   handleCombinePurchase,
   handleComposterPurchase,
   handleCowPenPurchase,
@@ -76,6 +78,7 @@ export const Shop = ({
   inventoryLimit,
   levelEntitlements,
   money,
+  purchasedCheeseMaker,
   purchasedCombine,
   purchasedComposter,
   purchasedCowPen,
@@ -90,6 +93,7 @@ export const Shop = ({
 
   storageUpgradeCost = getCostOfNextStorageExpansion(inventoryLimit),
 }: {
+  handleCheeseMakerPurchase: (id: number) => void
   handleCombinePurchase: (id: number) => void
   handleComposterPurchase: (id: number) => void
   handleCowPenPurchase: (id: number) => void
@@ -102,6 +106,7 @@ export const Shop = ({
   inventoryLimit: number
   levelEntitlements: farmhand.levelEntitlements
   money: number
+  purchasedCheeseMaker: number
   purchasedCombine: number
   purchasedComposter: number
   purchasedCowPen: number
@@ -363,6 +368,27 @@ export const Shop = ({
                 }) => `${dollarString(price)}: ${type} Composter`,
                 tiers: PURCHASEABLE_COMPOSTERS,
                 title: 'Buy composter',
+              }}
+            />
+          </li>
+          <li>
+            <TierPurchase
+              {...{
+                description:
+                  'You can purchase a Cheese Maker to turn milk into cheese.',
+                onBuyClick: handleCheeseMakerPurchase,
+                maxedOutPlaceholder:
+                  "You've already purchased the cheese maker!",
+                purchasedTier: purchasedCheeseMaker,
+                renderTierLabel: ({
+                  type,
+                  price,
+                }: {
+                  type: string
+                  price: number
+                }) => `${dollarString(price)}: ${type} Cheese Maker`,
+                tiers: PURCHASEABLE_CHEESE_MAKERS,
+                title: 'Buy cheese maker',
               }}
             />
           </li>

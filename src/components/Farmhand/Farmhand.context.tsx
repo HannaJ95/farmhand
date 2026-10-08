@@ -171,6 +171,7 @@ export const createContextData = (): ContextData => {
       selectedItemId: '',
       priceCrashes: {},
       priceSurges: {},
+      purchasedCheeseMaker: 0,
       purchasedCombine: 0,
       purchasedComposter: 0,
       purchasedCowPen: 0,

@@ -164,14 +164,7 @@
       },
       null
     ],
-    [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
+    [null, null, null, null, null, null],
     [
       {
         "itemId": "weed",
@@ -259,28 +252,9 @@
       }
     ]
   ],
-  "forest": [
-    [
-      null,
-      null,
-      null,
-      null
-    ]
-  ],
-  "historicalDailyLosses": [
-    0,
-    0,
-    0,
-    0,
-    -143.7
-  ],
-  "historicalDailyRevenue": [
-    0,
-    0,
-    0,
-    0,
-    0
-  ],
+  "forest": [[null, null, null, null]],
+  "historicalDailyLosses": [0, 0, 0, 0, -143.7],
+  "historicalDailyRevenue": [0, 0, 0, 0, 0],
   "historicalValueAdjustments": [
     {
       "asparagus": 1.254561372610583,
@@ -368,13 +342,9 @@
       "day": 6,
       "notifications": {
         "error": [],
-        "info": [
-          "It rained in the night!"
-        ],
+        "info": ["It rained in the night!"],
         "success": [],
-        "warning": [
-          "Your loan balance has grown to $552.03."
-        ]
+        "warning": ["Your loan balance has grown to $552.03."]
       }
     },
     {
@@ -383,9 +353,7 @@
         "error": [],
         "info": [],
         "success": [],
-        "warning": [
-          "Your loan balance has grown to $541.21."
-        ]
+        "warning": ["Your loan balance has grown to $541.21."]
       }
     },
     {
@@ -394,9 +362,7 @@
         "error": [],
         "info": [],
         "success": [],
-        "warning": [
-          "Your loan balance has grown to $530.60."
-        ]
+        "warning": ["Your loan balance has grown to $530.60."]
       }
     },
     {
@@ -405,28 +371,23 @@
         "error": [],
         "info": [],
         "success": [],
-        "warning": [
-          "Your loan balance has grown to $520.20."
-        ]
+        "warning": ["Your loan balance has grown to $520.20."]
       }
     },
     {
       "day": 2,
       "notifications": {
         "error": [],
-        "info": [
-          "It rained in the night!"
-        ],
+        "info": ["It rained in the night!"],
         "success": [],
-        "warning": [
-          "Your loan balance has grown to $510.00."
-        ]
+        "warning": ["Your loan balance has grown to $510.00."]
       }
     }
   ],
   "priceCrashes": {},
   "priceSurges": {},
   "profitabilityStreak": 0,
+  "purchasedCheeseMaker": 0,
   "purchasedCombine": 0,
   "purchasedComposter": 0,
   "purchasedCowPen": 0,

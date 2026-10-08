@@ -99,6 +99,9 @@ export class FarmhandReducers extends Component<FarmhandProps, FarmhandState> {
   prependPendingPeerMessage(...args: any[]) {
     throw new Error('Unimplemented')
   }
+  purchaseCheeseMaker(...args: any[]) {
+    throw new Error('Unimplemented')
+  }
   purchaseCombine(...args: any[]) {
     throw new Error('Unimplemented')
   }
