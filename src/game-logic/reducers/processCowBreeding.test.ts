@@ -3,6 +3,7 @@ import {
   COW_GESTATION_PERIOD_DAYS,
   PURCHASEABLE_COW_PENS,
 } from '../../constants.js'
+import { randomNumberService } from '../../common/services/randomNumber.ts'
 import { genders } from '../../enums.js'
 import { generateCow } from '../../utils/generateCow.js'
 import { testState } from '../../test-utils/index.js'
@@ -121,7 +122,113 @@ describe('processCowBreeding', () => {
             })
 
             test('adds offspring cow to cowInventory', () => {
-              expect(newState.cowInventory).toHaveLength(3)
+              expect(newState.cowInventory.length).toBeGreaterThanOrEqual(3)
+              expect(newState.cowInventory.length).toBeLessThanOrEqual(4)
+            })
+
+            test('adds a twin calf when the twin chance rolls true', () => {
+              const randomSpy = vi.spyOn(
+                randomNumberService,
+                'generateRandomNumber'
+              )
+
+              randomSpy.mockReturnValue(0.005)
+
+              const twinState = processCowBreeding(
+                testState({
+                  cowBreedingPen: {
+                    cowId1: maleCow1.id,
+                    cowId2: femaleCow.id,
+                    daysUntilBirth: 1,
+                  },
+                  cowInventory: [maleCow1, femaleCow],
+                  experience: 0,
+                  newDayNotifications: [],
+                  purchasedCowPen: 1,
+                })
+              )
+
+              expect(twinState.cowInventory).toHaveLength(4)
+
+              randomSpy.mockRestore()
+            })
+
+            test('twins share traits but have separate identities', () => {
+              const randomSpy = vi.spyOn(
+                randomNumberService,
+                'generateRandomNumber'
+              )
+
+              randomSpy
+                .mockReturnValueOnce(0.1)
+                .mockReturnValueOnce(0.2)
+                .mockReturnValueOnce(0.2)
+                .mockReturnValueOnce(0.005)
+                .mockReturnValueOnce(0.9)
+                .mockReturnValueOnce(0.9)
+
+              const twinState = processCowBreeding(
+                testState({
+                  cowBreedingPen: {
+                    cowId1: maleCow1.id,
+                    cowId2: femaleCow.id,
+                    daysUntilBirth: 1,
+                  },
+                  cowInventory: [maleCow1, femaleCow],
+                  experience: 0,
+                  newDayNotifications: [],
+                  purchasedCowPen: 1,
+                })
+              )
+              const [firstTwin, secondTwin] = twinState.cowInventory.slice(-2)
+
+              expect(secondTwin).toMatchObject({
+                gender: firstTwin.gender,
+                color: firstTwin.color,
+                baseWeight: firstTwin.baseWeight,
+                colorsInBloodline: firstTwin.colorsInBloodline,
+                patternSeed: firstTwin.id,
+              })
+              expect(firstTwin.patternSeed).toEqual(secondTwin.patternSeed)
+              expect(secondTwin.id).not.toEqual(firstTwin.id)
+
+              randomSpy.mockRestore()
+            })
+
+            test('mentions both twins in the notification', () => {
+              const randomSpy = vi.spyOn(
+                randomNumberService,
+                'generateRandomNumber'
+              )
+
+              randomSpy.mockReturnValue(0.005)
+
+              const twinState = processCowBreeding(
+                testState({
+                  cowBreedingPen: {
+                    cowId1: maleCow1.id,
+                    cowId2: femaleCow.id,
+                    daysUntilBirth: 1,
+                  },
+                  cowInventory: [maleCow1, femaleCow],
+                  experience: 0,
+                  newDayNotifications: [],
+                  purchasedCowPen: 1,
+                })
+              )
+
+              expect(twinState.newDayNotifications).toHaveLength(1)
+              expect(twinState.newDayNotifications[0].message).toContain(
+                'twins'
+              )
+              expect(twinState.newDayNotifications[0].message).toContain(
+                twinState.cowInventory[2].name
+              )
+              expect(twinState.newDayNotifications[0].message).toContain(
+                twinState.cowInventory[3].name
+              )
+
+              randomSpy.mockRestore()
             })
 
             test('adds experience', () => {

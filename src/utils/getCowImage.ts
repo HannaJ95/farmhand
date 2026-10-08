@@ -103,12 +103,10 @@ export const getCowImage = async (
   cow: farmhand.cow,
   isBlinking = false
 ): Promise<string> => {
-  const cowIdNumber = convertStringToInteger(cow.id)
+  const cowIdNumber = convertStringToInteger(cow.patternSeed ?? cow.id)
 
   const { variations, blinkingVariations } = animals.cow
-
   const cowVariations = isBlinking ? blinkingVariations : variations
-
   const cowTemplate = cowVariations[cowIdNumber % cowVariations.length]
 
   return await colorizeCowTemplate(

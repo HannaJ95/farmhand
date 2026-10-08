@@ -147,6 +147,7 @@ declare namespace farmhand {
     isBred: boolean
     isUsingHuggingMachine: boolean
     name: string
+    patternSeed?: string
     originalOwnerId: string
     ownerId: string
     timesTraded: number

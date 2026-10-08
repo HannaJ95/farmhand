@@ -90,6 +90,15 @@ export const COW_BORN_MESSAGE = (
 ): string =>
   `${parentCow1.name} and ${parentCow2.name} had a baby: ${offspringCow.name}! Welcome to the world, ${offspringCow.name}!`
 
+export const COW_TWINS_MESSAGE = (
+  _: any,
+  parentCow1: farmhand.cow,
+  parentCow2: farmhand.cow,
+  twinCow1: farmhand.cow,
+  twinCow2: farmhand.cow
+): string =>
+  `${parentCow1.name} and ${parentCow2.name} had twins: ${twinCow1.name} and ${twinCow2.name}! Welcome to the world, ${twinCow1.name} and ${twinCow2.name}!`
+
 export const RECIPE_LEARNED = (_: any, recipe: farmhand.recipe): string =>
   `You learned a new recipe: **${recipe.name}**!`
 

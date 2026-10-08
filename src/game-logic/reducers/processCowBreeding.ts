@@ -1,3 +1,4 @@
+import { random } from '../../common/utils.js'
 import { findCowById } from '../../utils/findCowById.js'
 import { generateOffspringCow } from '../../utils/generateOffspringCow.js'
 import { cowColors } from '../../enums.js'
@@ -6,8 +7,9 @@ import {
   COW_GESTATION_PERIOD_DAYS,
   COW_MINIMUM_HAPPINESS_TO_BREED,
   PURCHASEABLE_COW_PENS,
+  COW_TWIN_CHANCE,
 } from '../../constants.js'
-import { COW_BORN_MESSAGE } from '../../templates.js'
+import { COW_BORN_MESSAGE, COW_TWINS_MESSAGE } from '../../templates.js'
 
 import { addExperience } from './addExperience.js'
 
@@ -53,6 +55,31 @@ export const processCowBreeding = (state: farmhand.state): farmhand.state => {
     ? generateOffspringCow(cow1, cow2, playerId)
     : null
 
+  const newborns: farmhand.cow[] = offspringCow ? [offspringCow] : []
+
+  const canGenerateTwin =
+    !!offspringCow &&
+    !!cowPenData &&
+    cowInventory.length + newborns.length < cowPenData.cows &&
+    random() <= COW_TWIN_CHANCE
+
+  if (canGenerateTwin) {
+    const patternSeed = offspringCow.patternSeed ?? offspringCow.id
+
+    newborns[0] = { ...offspringCow, patternSeed }
+    newborns.push(
+      generateOffspringCow(cow1, cow2, playerId, {
+        gender: offspringCow.gender,
+        color: offspringCow.color,
+        baseWeight: offspringCow.baseWeight,
+        patternSeed,
+      })
+    )
+  }
+
+  const newCowInventory =
+    newborns.length > 0 ? [...cowInventory, ...newborns] : cowInventory
+
   if (offspringCow) {
     const experienceGained =
       offspringCow.color === cowColors.RAINBOW
@@ -62,23 +89,27 @@ export const processCowBreeding = (state: farmhand.state): farmhand.state => {
     state = addExperience(state, experienceGained)
   }
 
+  const birthMessage =
+    newborns.length > 1 && newborns[0] && newborns[1]
+      ? COW_TWINS_MESSAGE('', cow1, cow2, newborns[0], newborns[1])
+      : offspringCow
+      ? COW_BORN_MESSAGE('', cow1, cow2, offspringCow)
+      : ''
+
   return {
     ...state,
-    cowInventory:
-      shouldGenerateOffspring && offspringCow
-        ? [...cowInventory, offspringCow]
-        : cowInventory,
+    cowInventory: newCowInventory,
     cowBreedingPen: {
       ...cowBreedingPen,
       daysUntilBirth: shouldGenerateOffspring
         ? COW_GESTATION_PERIOD_DAYS
         : daysUntilBirth,
     },
-    newDayNotifications: offspringCow
+    newDayNotifications: birthMessage
       ? [
           ...newDayNotifications,
           {
-            message: COW_BORN_MESSAGE('', cow1, cow2, offspringCow),
+            message: birthMessage,
             severity: 'success',
           },
         ]
