@@ -4,6 +4,7 @@ import { render, screen } from '@testing-library/react'
 import { INFINITE_STORAGE_LIMIT } from '../../constants.js'
 import { itemType, stageFocusType } from '../../enums.js'
 import { noop } from '../../utils/noop.js'
+import { SHOP_INVENTORY_FULL_BANNER } from '../../strings.js'
 
 import FarmhandContext, {
   createContextData,
@@ -12,6 +13,7 @@ import FarmhandContext, {
 import Shop from './Shop.js'
 
 const baseGameState = {
+  inventory: [] as farmhand.state['inventory'],
   inventoryLimit: INFINITE_STORAGE_LIMIT,
 
   money: 0,
@@ -104,6 +106,36 @@ describe('<Shop />', () => {
 
     test('the Saplings tab does not exist', () => {
       expect(screen.queryByText('Saplings')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('inventory full banner', () => {
+    test('is not shown when storage is infinite', () => {
+      renderShop({ inventoryLimit: INFINITE_STORAGE_LIMIT })
+
+      expect(
+        screen.queryByText(SHOP_INVENTORY_FULL_BANNER)
+      ).not.toBeInTheDocument()
+    })
+
+    test('is not shown when inventory space remains', () => {
+      renderShop({
+        inventory: [{ id: 'carrot', quantity: 5 }],
+        inventoryLimit: 10,
+      })
+
+      expect(
+        screen.queryByText(SHOP_INVENTORY_FULL_BANNER)
+      ).not.toBeInTheDocument()
+    })
+
+    test('is shown when inventory is full', () => {
+      renderShop({
+        inventory: [{ id: 'carrot', quantity: 5 }],
+        inventoryLimit: 5,
+      })
+
+      expect(screen.getByText(SHOP_INVENTORY_FULL_BANNER)).toBeInTheDocument()
     })
   })
 })

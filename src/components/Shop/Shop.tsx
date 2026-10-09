@@ -1,5 +1,6 @@
 import React from 'react'
 import { array, func, number, object } from 'prop-types'
+import Alert from '@mui/material/Alert/index.js'
 import Button from '@mui/material/Button/index.js'
 import Card from '@mui/material/Card/index.js'
 import CardActions from '@mui/material/CardActions/index.js'
@@ -14,7 +15,9 @@ import { moneyString } from '../../utils/moneyString.js'
 import { dollarString } from '../../utils/dollarString.js'
 import { getCostOfNextStorageExpansion } from '../../utils/getCostOfNextStorageExpansion.js'
 import { integerString } from '../../utils/integerString.js'
+import { doesInventorySpaceRemain } from '../../utils/doesInventorySpaceRemain.js'
 import { memoize } from '../../utils/memoize.js'
+import { SHOP_INVENTORY_FULL_BANNER } from '../../strings.js'
 import { items } from '../../img/index.js'
 import { itemType, stageFocusType, toolType } from '../../enums.js'
 import {
@@ -75,6 +78,7 @@ export const Shop = ({
   handleSmelterPurchase,
   handleStorageExpansionPurchase,
   handleWoodChipperPurchase,
+  inventory,
   inventoryLimit,
   levelEntitlements,
   money,
@@ -103,6 +107,7 @@ export const Shop = ({
   handleSmelterPurchase: (id: number) => void
   handleStorageExpansionPurchase: () => void
   handleWoodChipperPurchase: (id: number) => void
+  inventory: farmhand.state['inventory']
   inventoryLimit: number
   levelEntitlements: farmhand.levelEntitlements
   money: number
@@ -127,6 +132,11 @@ export const Shop = ({
 
   const showSaplings = isForestUnlocked && saplings.length > 0
 
+  const isInventoryFull = !doesInventorySpaceRemain({
+    inventory,
+    inventoryLimit,
+  })
+
   const suppliesTabIndex = showSaplings ? 2 : 1
   const upgradesTabIndex = showSaplings ? 3 : 2
 
@@ -138,6 +148,11 @@ export const Shop = ({
 
   return (
     <Div className="Shop" sx={centerTabsSx}>
+      {isInventoryFull && (
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          {SHOP_INVENTORY_FULL_BANNER}
+        </Alert>
+      )}
       <Tabs
         value={currentTab}
         onChange={(_e, newTab) => setCurrentTab(newTab)}
@@ -427,6 +442,7 @@ Shop.propTypes = {
   handleCellarPurchase: func.isRequired,
   handleFieldPurchase: func.isRequired,
   handleStorageExpansionPurchase: func.isRequired,
+  inventory: array.isRequired,
   inventoryLimit: number.isRequired,
   money: number.isRequired,
   purchasedCowPen: number.isRequired,
